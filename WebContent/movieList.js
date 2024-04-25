@@ -12,13 +12,14 @@ function handleMovieListResult(resultData) {
         // Concatenate the html tags with resultData jsonObject
         let row_HTML= "";
         row_HTML += "<tr>";
-        row_HTML += "<th>" + resultData[i]["movie_title"] + "</th>";
+        //row_HTML += "<th>" + resultData[i]["movie_title"] + "</th>";
+        row_HTML += "<th>" + '<a href="single-movie.html?id=' + resultData[i]["movie_id"] + '">' + resultData[i]["movie_title"] + '</a>' + "</th>";
         row_HTML += "<th>" + resultData[i]["movie_year"] + "</th>";
         row_HTML += "<th>" + resultData[i]["movie_director"] + "</th>";
         row_HTML += "<th>" + resultData[i]["genres"] + "</th>";
 
         // Handle Stars
-        let starsAndID = resultData[i]["stars"].split(", ");
+        let starsAndID = resultData[i]["stars"].split(",");
         row_HTML += "<th>";
         let count = 0
         for (let starIdPair of starsAndID) {
