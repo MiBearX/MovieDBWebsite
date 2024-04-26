@@ -27,14 +27,35 @@
     <a href="index.html" class="btn btn-primary">Browse Movies</a>
 </div>
 
-<div class="mb-3">
-    <label for="perPageSelect">Movies per page:</label>
-    <select id="perPageSelect" class="form-control">
-        <option value="10">10</option>
-        <option value="25">25</option>
-        <option value="50">50</option>
-        <option value="100">100</option>
-    </select>
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <div class="mb-3">
+        <label for="sortingSelect">Sort By:</label>
+        <select id="sortingSelect" class="form-control">
+            <option value="rating">Rating</option>
+            <option value="title">Title</option>
+
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="sortingOrderSelect">Order By:</label>
+        <select id="sortingOrderSelect" class="form-control">
+            <option value="DESC">Descending</option>
+            <option value="ASC">Ascending</option>
+
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="perPageSelect">Movies per page:</label>
+        <select id="perPageSelect" class="form-control">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+    </div>
+
 </div>
 
 <div class="d-flex justify-content-between">

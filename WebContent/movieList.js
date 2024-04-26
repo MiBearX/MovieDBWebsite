@@ -1,5 +1,19 @@
 let currentPage = 1;
 let moviesPerPage = 10;
+let orderBy = "rating"
+let order = "DESC"
+
+$('#sortingSelect').change(function() {
+    orderBy = $(this).val();
+    $("#movie_list_table_body").empty();
+    fetchMovies();
+});
+
+$('#sortingOrderSelect').change(function() {
+    order = $(this).val();
+    $("#movie_list_table_body").empty();
+    fetchMovies();
+});
 
 
 $('#perPageSelect').change(function() {
@@ -78,7 +92,7 @@ function fetchMovies() {
     $.ajax({
         dataType : "json",
         method: 'GET',
-        url: 'api/movie_list?page=' + currentPage + '&limit=' + moviesPerPage,
+        url: 'api/movie_list?page=' + currentPage + '&limit=' + moviesPerPage + '&orderBy=' + orderBy + '&order=' + order,
         success: function(resultData) {
             handleMovieListResult(resultData);
         },
@@ -92,6 +106,6 @@ function fetchMovies() {
 jQuery.ajax({
     dataType: "json", // Setting return data type
     method: "GET", // Setting request method
-    url: 'api/movie_list?page=' + currentPage + '&limit=' + moviesPerPage, // Setting request url, which is mapped by StarsServlet in Stars.java
+    url: 'api/movie_list?page=' + currentPage + '&limit=' + moviesPerPage + '&orderBy=' + orderBy + '&order=' + order,
     success: (resultData) => handleMovieListResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 });

@@ -51,6 +51,9 @@ public class MovieListServlet extends HttpServlet {
             String currentPage = request.getParameter("page");
             String moviesPerPage = request.getParameter("limit");
 
+            String orderBy = request.getParameter("orderBy");
+            String order = request.getParameter("order");
+
             // build query
             String query;
             if (currentPage == null || moviesPerPage == null) {
@@ -66,13 +69,29 @@ public class MovieListServlet extends HttpServlet {
                 int current_page = Integer.parseInt(currentPage);
                 int movies_per_page = Integer.parseInt(moviesPerPage);
                 int offset = (current_page - 1) * movies_per_page;
+
                 query = "SELECT m.id, m.title, m.year, m.director, ra.rating," +
                         "GROUP_CONCAT(DISTINCT genres.name ORDER BY genres.name) AS genres, " +
-                        "GROUP_CONCAT(DISTINCT CONCAT(stars.name, ':', stars.id) ORDER BY stars.name) AS starsWithId FROM movies m " +
+                        "GROUP_CONCAT(DISTINCT CONCAT(stars.name, ':', stars.id) ORDER BY stars_played DESC, stars.name) AS starsWithId FROM movies m " +
                         "LEFT JOIN ratings ra ON m.id = ra.movieId LEFT JOIN genres_in_movies gm ON m.id = gm.movieId " +
                         "LEFT JOIN genres ON gm.genreId = genres.id LEFT JOIN stars_in_movies sm ON m.id = sm.movieId " +
-                        "LEFT JOIN stars ON sm.starId = stars.id GROUP BY m.id, m.title, m.year, m.director, ra.rating " +
-                        "ORDER BY ra.rating DESC LIMIT " + moviesPerPage +  " OFFSET " + offset + ";";
+                        "LEFT JOIN stars ON sm.starId = stars.id LEFT JOIN (SELECT starId, COUNT(*) AS stars_played " +
+                        "FROM stars_in_movies GROUP BY starId) AS star_counts ON stars.id = star_counts.starId " +
+                        "GROUP BY m.id, m.title, m.year, m.director, ra.rating ";
+
+
+                // sorting
+                switch (orderBy) {
+                    case "title":
+                        query += "ORDER BY m.title " + order + ", ra.rating DESC LIMIT " + moviesPerPage + " OFFSET " + offset;
+                        break;
+                    case "rating":
+                        query += "ORDER BY ra.rating " + order + ", m.title ASC LIMIT " + moviesPerPage + " OFFSET " + offset;
+                        break;
+                    default:
+                        query += "ORDER BY ra.rating DESC LIMIT " + moviesPerPage + " OFFSET " + offset;
+                        break;
+                }
             }
 
 
