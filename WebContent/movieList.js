@@ -1,12 +1,37 @@
+let currentPage = 1;
+let moviesPerPage = 10;
+
+
+$('#perPageSelect').change(function() {
+    moviesPerPage = parseInt($(this).val(), 10);
+    currentPage = 1; // Reset to first page
+    $("#movie_list_table_body").empty();
+    fetchMovies();
+});
+
+$('#nextBtn').click(function() {
+    currentPage++;
+    $("#movie_list_table_body").empty();
+    fetchMovies();
+});
+
+$('#prevBtn').click(function() {
+    if (currentPage > 1) {
+        currentPage--;
+        $("#movie_list_table_body").empty();
+        fetchMovies();
+    }
+});
+
 function handleMovieListResult(resultData) {
     console.log("handleMovieListResult: populating movie table from resultData");
 
     // Populate the star table
     // Find the empty table body by id "star_table_body"
     let movieTableBodyElement = jQuery("#movie_list_table_body");
+    let movieCount = resultData[0]["moviesPerPage"]
 
-    // Iterate through resultData, no more than 10 entries
-    for (let i = 0; i < Math.min(20, resultData.length); i++) {
+    for (let i = 0; i < Math.min(movieCount, resultData.length); i++) {
 
 
         // Concatenate the html tags with resultData jsonObject
@@ -49,10 +74,24 @@ function handleMovieListResult(resultData) {
  * Once this .js is loaded, following scripts will be executed by the browser
  */
 
+function fetchMovies() {
+    $.ajax({
+        dataType : "json",
+        method: 'GET',
+        url: 'api/movie_list?page=' + currentPage + '&limit=' + moviesPerPage,
+        success: function(resultData) {
+            handleMovieListResult(resultData);
+        },
+        error: function(error) {
+            console.error('Error fetching movies:', error);
+        }
+    });
+}
+
 // Makes the HTTP GET request and registers on success callback function handleStarResult
 jQuery.ajax({
     dataType: "json", // Setting return data type
     method: "GET", // Setting request method
-    url: "api/movie_list", // Setting request url, which is mapped by StarsServlet in Stars.java
+    url: 'api/movie_list?page=' + currentPage + '&limit=' + moviesPerPage, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleMovieListResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 });

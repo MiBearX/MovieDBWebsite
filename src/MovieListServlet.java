@@ -12,12 +12,15 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Arrays;
 
+
 @WebServlet(name = "MovieListServlet", urlPatterns = "/api/movie_list")
 public class MovieListServlet extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
 
     private DataSource dataSource;
@@ -35,6 +38,7 @@ public class MovieListServlet extends HttpServlet {
 
         response.setContentType("application/json"); // Response mime type
 
+
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
 
@@ -44,24 +48,34 @@ public class MovieListServlet extends HttpServlet {
             // Declare our statement
             Statement statement = conn.createStatement();
 
-            //String query = "SELECT * from stars";
-            /*String query = "SELECT m.id, m.title, m.year, m.director, m.rating, GROUP_CONCAT(DISTINCT g.name " +
-                    "ORDER BY g.name LIMIT 3) AS genres, GROUP_CONCAT(DISTINCT s.name ORDER BY s.name LIMIT 3) " +
-                    "AS stars FROM movies m LEFT JOIN genres_in_movies gm ON m.id = gm.movieId LEFT JOIN genres g " +
-                    "ON gm.genreId = g.id LEFT JOIN stars_in_movies sm ON m.id = sm.movieId LEFT JOIN stars s " +
-                    "ON sm.starId = s.id GROUP BY m.id ORDER BY m.rating DESC LIMIT 20";*/
-            String query = "SELECT m.id, m.title, m.year, m.director, ra.rating," +
-                    "GROUP_CONCAT(DISTINCT genres.name ORDER BY genres.name) AS genres, " +
-                    "GROUP_CONCAT(DISTINCT CONCAT(stars.name, ':', stars.id) ORDER BY stars.name) AS starsWithId FROM movies m " +
-                    "LEFT JOIN ratings ra ON m.id = ra.movieId LEFT JOIN genres_in_movies gm ON m.id = gm.movieId " +
-                    "LEFT JOIN genres ON gm.genreId = genres.id LEFT JOIN stars_in_movies sm ON m.id = sm.movieId " +
-                    "LEFT JOIN stars ON sm.starId = stars.id GROUP BY m.id, m.title, m.year, m.director, ra.rating " +
-                    "ORDER BY ra.rating DESC LIMIT 20;";
+            String currentPage = request.getParameter("page");
+            String moviesPerPage = request.getParameter("limit");
+
+            // build query
+            String query;
+            if (currentPage == null || moviesPerPage == null) {
+                // if options are null, return top 20 movies
+                query = "SELECT m.id, m.title, m.year, m.director, ra.rating," +
+                        "GROUP_CONCAT(DISTINCT genres.name ORDER BY genres.name) AS genres, " +
+                        "GROUP_CONCAT(DISTINCT CONCAT(stars.name, ':', stars.id) ORDER BY stars.name) AS starsWithId FROM movies m " +
+                        "LEFT JOIN ratings ra ON m.id = ra.movieId LEFT JOIN genres_in_movies gm ON m.id = gm.movieId " +
+                        "LEFT JOIN genres ON gm.genreId = genres.id LEFT JOIN stars_in_movies sm ON m.id = sm.movieId " +
+                        "LEFT JOIN stars ON sm.starId = stars.id GROUP BY m.id, m.title, m.year, m.director, ra.rating " +
+                        "ORDER BY ra.rating DESC LIMIT 20 OFFSET 0";
+            } else {
+                int current_page = Integer.parseInt(currentPage);
+                int movies_per_page = Integer.parseInt(moviesPerPage);
+                int offset = (current_page - 1) * movies_per_page;
+                query = "SELECT m.id, m.title, m.year, m.director, ra.rating," +
+                        "GROUP_CONCAT(DISTINCT genres.name ORDER BY genres.name) AS genres, " +
+                        "GROUP_CONCAT(DISTINCT CONCAT(stars.name, ':', stars.id) ORDER BY stars.name) AS starsWithId FROM movies m " +
+                        "LEFT JOIN ratings ra ON m.id = ra.movieId LEFT JOIN genres_in_movies gm ON m.id = gm.movieId " +
+                        "LEFT JOIN genres ON gm.genreId = genres.id LEFT JOIN stars_in_movies sm ON m.id = sm.movieId " +
+                        "LEFT JOIN stars ON sm.starId = stars.id GROUP BY m.id, m.title, m.year, m.director, ra.rating " +
+                        "ORDER BY ra.rating DESC LIMIT " + moviesPerPage +  " OFFSET " + offset + ";";
+            }
 
 
-            //GROUP_CONCAT(DISTINCT CONCAT(stars.name, ':', stars.id) ORDER BY stars.name) AS starsWithIds
-            // old query line below
-            // GROUP_CONCAT(DISTINCT stars.name ORDER BY stars.name) AS stars FROM movies m
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
@@ -92,6 +106,7 @@ public class MovieListServlet extends HttpServlet {
 
                 // Create a JsonObject based on the data we retrieve from rs
                 JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("moviesPerPage", moviesPerPage);
                 jsonObject.addProperty("movie_id", movie_id);
                 jsonObject.addProperty("movie_title", movie_title);
                 jsonObject.addProperty("movie_year", movie_year);
