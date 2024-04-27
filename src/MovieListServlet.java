@@ -54,6 +54,9 @@ public class MovieListServlet extends HttpServlet {
             String orderBy = request.getParameter("orderBy");
             String order = request.getParameter("order");
 
+            String genreId = request.getParameter("genreId");
+
+
             // build query
             String query;
             if (currentPage == null || moviesPerPage == null) {
@@ -71,13 +74,18 @@ public class MovieListServlet extends HttpServlet {
                 int offset = (current_page - 1) * movies_per_page;
 
                 query = "SELECT m.id, m.title, m.year, m.director, ra.rating," +
-                        "GROUP_CONCAT(DISTINCT genres.name ORDER BY genres.name) AS genres, " +
+                        "GROUP_CONCAT(DISTINCT CONCAT(genres.name, ':', genres.id) ORDER BY genres.name) AS genres, " +
                         "GROUP_CONCAT(DISTINCT CONCAT(stars.name, ':', stars.id) ORDER BY stars_played DESC, stars.name) AS starsWithId FROM movies m " +
                         "LEFT JOIN ratings ra ON m.id = ra.movieId LEFT JOIN genres_in_movies gm ON m.id = gm.movieId " +
                         "LEFT JOIN genres ON gm.genreId = genres.id LEFT JOIN stars_in_movies sm ON m.id = sm.movieId " +
                         "LEFT JOIN stars ON sm.starId = stars.id LEFT JOIN (SELECT starId, COUNT(*) AS stars_played " +
-                        "FROM stars_in_movies GROUP BY starId) AS star_counts ON stars.id = star_counts.starId " +
-                        "GROUP BY m.id, m.title, m.year, m.director, ra.rating ";
+                        "FROM stars_in_movies GROUP BY starId) AS star_counts ON stars.id = star_counts.starId ";
+
+                if (genreId != null) {
+                    query += "WHERE gm.genreId = " + genreId + " ";
+                }
+
+                query +="GROUP BY m.id, m.title, m.year, m.director, ra.rating ";
 
 
                 // sorting

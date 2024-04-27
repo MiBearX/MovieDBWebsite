@@ -20,7 +20,7 @@ $(document).ready(function() {
                 console.log("AJAX request successful.");
                 if (data.status === "success") {
                     console.log("Login successful, redirecting...");
-                    window.location.replace("mainPage.html"); // Redirect to Main Page
+                    window.location.replace("main.html"); // Redirect to Main Page
                 } else {
                     console.log("Login failed: " + data.message);
                     $('#error_message').text(data.message); // Show error message

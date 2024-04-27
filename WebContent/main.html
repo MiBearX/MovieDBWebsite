@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+</head>
+<body>
+<h1>Main Page</h1>
+
+<!-- Search Section -->
+<section id="search">
+    <h2>Search Movies</h2>
+    <form id="searchForm">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title">
+
+        <label for="year">Year:</label>
+        <input type="number" id="year" name="year">
+
+        <label for="director">Director:</label>
+        <input type="text" id="director" name="director">
+
+        <label for="star">Star's Name:</label>
+        <input type="text" id="star" name="star">
+
+        <button type="submit">Search</button>
+    </form>
+</section>
+
+<!-- Browse Section -->
+<section id="browse">
+    <h2>Browse Movies</h2>
+    <div>
+        <h3>Browse by Genre</h3>
+        <ul id="genreList">
+        </ul>
+    </div>
+    <div>
+        <h3>Browse by Title</h3>
+        <ul id="titleList">
+            <!-- Generate alphanumerical character list dynamically -->
+            <!-- Example: <li><a href="movieList.html?title=A">A</a></li> -->
+            <!-- Include a link for "*" character -->
+        </ul>
+    </div>
+</section>
+
+<!-- Script Section (jQuery is used for simplicity) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
