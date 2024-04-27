@@ -1,7 +1,7 @@
 let currentPage = 1;
 let moviesPerPage = 10;
-let orderBy = "rating"
-let order = "DESC"
+let orderBy = "rating";
+let order = "DESC";
 
 
 var queryString = window.location.search;
@@ -9,8 +9,8 @@ var queryString = window.location.search;
 // Parse the query string to extract parameters and their values
 var urlParams = new URLSearchParams(queryString);
 
-// Get the value of the genreId parameter
-var genreId = urlParams.get('genreId');
+let genreId = urlParams.get('genreId');
+let titleChar = urlParams.get('titleChar');
 
 $('#sortingSelect').change(function() {
     orderBy = $(this).val();
@@ -119,6 +119,9 @@ function fetchMovies() {
     let apiURL = 'api/movie_list?page=' + currentPage + '&limit=' + moviesPerPage + '&orderBy=' + orderBy + '&order=' + order;
     if (genreId != null) {
         apiURL += '&genreId=' + genreId;
+    }
+    if (titleChar != null) {
+        apiURL += '&titleChar=' + titleChar;
     }
     $.ajax({
         dataType : "json",

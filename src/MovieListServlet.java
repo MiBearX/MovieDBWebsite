@@ -55,6 +55,7 @@ public class MovieListServlet extends HttpServlet {
             String order = request.getParameter("order");
 
             String genreId = request.getParameter("genreId");
+            String titleChar = request.getParameter("titleChar");
 
 
             // build query
@@ -83,6 +84,8 @@ public class MovieListServlet extends HttpServlet {
 
                 if (genreId != null) {
                     query += "WHERE gm.genreId = " + genreId + " ";
+                } else if (titleChar != null) { // assume you can't filter by genre and title at the same time
+                    query += "WHERE m.title LIKE '" + titleChar + "%' ";
                 }
 
                 query +="GROUP BY m.id, m.title, m.year, m.director, ra.rating ";
