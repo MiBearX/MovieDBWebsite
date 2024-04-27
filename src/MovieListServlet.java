@@ -50,12 +50,16 @@ public class MovieListServlet extends HttpServlet {
 
             String currentPage = request.getParameter("page");
             String moviesPerPage = request.getParameter("limit");
-
             String orderBy = request.getParameter("orderBy");
             String order = request.getParameter("order");
 
             String genreId = request.getParameter("genreId");
             String titleChar = request.getParameter("titleChar");
+
+            String movieTitle = request.getParameter("title");
+            String movieYear = request.getParameter("year");
+            String movieDirector = request.getParameter("director");
+            String movieStar = request.getParameter("star");
 
 
             // build query
@@ -85,7 +89,33 @@ public class MovieListServlet extends HttpServlet {
                 if (genreId != null) {
                     query += "WHERE gm.genreId = " + genreId + " ";
                 } else if (titleChar != null) { // assume you can't filter by genre and title at the same time
-                    query += "WHERE m.title LIKE '" + titleChar + "%' ";
+                    if (titleChar.equals("*")) {
+                        query += "WHERE NOT m.title REGEXP '^[a-zA-Z0-9]' ";
+                    } else {
+                        query += "WHERE m.title LIKE '" + titleChar + "%' ";
+                    }
+                } else { // user used search feature
+                    query += "WHERE ";
+                    boolean oneFieldNotNull = false;
+                    if (movieTitle != null) {
+                        query += "m.title LIKE CONCAT('%', '" + movieTitle + "', '%') AND ";
+                        oneFieldNotNull = true;
+                    }
+                    if (movieYear != null) {
+                        query += "m.year = " + movieYear + " AND ";
+                        oneFieldNotNull = true;
+                    }
+                    if (movieDirector != null) {
+                        query += "m.director LIKE CONCAT('%', '" + movieDirector + "', '%') AND ";
+                        oneFieldNotNull = true;
+                    }
+                    if (movieStar != null) {
+                        query += "stars.name LIKE CONCAT('%', '" + movieStar + "', '%') AND ";
+                        oneFieldNotNull = true;
+                    }
+                    if (oneFieldNotNull) {
+                        query = query.substring(0, query.length() - 4);
+                    }
                 }
 
                 query +="GROUP BY m.id, m.title, m.year, m.director, ra.rating ";
@@ -104,8 +134,6 @@ public class MovieListServlet extends HttpServlet {
                         break;
                 }
             }
-
-
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);

@@ -1,3 +1,31 @@
+$('#searchForm').submit(function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Get values from form inputs
+    let title = $('#title').val();
+    let year = $('#year').val();
+    let director = $('#director').val();
+    let star = $('#star').val();
+    let url = "index.html?"
+
+    if (title) {
+        url += "title=" + title + "&";
+    }
+    if (year) {
+        url += "year=" + year + "&";
+    }
+    if (director) {
+        url += "director=" + director + "&";
+    }
+    if (star) {
+        url += "star=" + star + "&";
+    }
+
+    url = url.slice(0, -1);
+    window.location.href = url;
+});
+
+
 function handleGenreResult(resultData) {
     let characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ*';
     let genreList = jQuery("#genreList");

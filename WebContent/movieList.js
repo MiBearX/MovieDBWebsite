@@ -11,6 +11,10 @@ var urlParams = new URLSearchParams(queryString);
 
 let genreId = urlParams.get('genreId');
 let titleChar = urlParams.get('titleChar');
+let movieTitle = urlParams.get("title");
+let movieYear = urlParams.get("year");
+let movieDirector = urlParams.get("director");
+let movieStar = urlParams.get("star")
 
 $('#sortingSelect').change(function() {
     orderBy = $(this).val();
@@ -123,6 +127,19 @@ function fetchMovies() {
     if (titleChar != null) {
         apiURL += '&titleChar=' + titleChar;
     }
+    if (movieTitle != null) {
+        apiURL += '&title=' + movieTitle;
+    }
+    if (movieYear != null) {
+        apiURL += '&year=' + movieYear;
+    }
+    if (movieDirector != null) {
+        apiURL += '&director=' + movieDirector;
+    }
+    if (movieStar != null) {
+        apiURL += '&star=' + movieStar;
+    }
+
     $.ajax({
         dataType : "json",
         method: 'GET',
