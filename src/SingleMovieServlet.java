@@ -50,13 +50,24 @@ public class SingleMovieServlet extends HttpServlet {
             // Get a connection from dataSource
 
             // Construct a query with parameter represented by "?"
-            String query = "SELECT m.id, m.title, m.year, m.director, ra.rating," +
+            /*String query = "SELECT m.id, m.title, m.year, m.director, ra.rating," +
                     "GROUP_CONCAT(DISTINCT genres.name ORDER BY genres.name) AS genres, " +
                     "GROUP_CONCAT(DISTINCT CONCAT(stars.name, ':', stars.id) ORDER BY stars.name) AS starsWithId FROM movies m " +
                     "LEFT JOIN ratings ra ON m.id = ra.movieId LEFT JOIN genres_in_movies gm ON m.id = gm.movieId " +
                     "LEFT JOIN genres ON gm.genreId = genres.id LEFT JOIN stars_in_movies sm ON m.id = sm.movieId " +
                     "LEFT JOIN stars ON sm.starId = stars.id WHERE m.id = ? GROUP BY m.id, m.title, m.year, m.director, " +
-                    "ra.rating ORDER BY ra.rating DESC LIMIT 20;";
+                    "ra.rating ORDER BY ra.rating DESC LIMIT 20;";*/
+            String query = "SELECT m.id, m.title, m.year, m.director, ra.rating, " +
+                    "GROUP_CONCAT(DISTINCT CONCAT(genres.name, ':', genres.id) ORDER BY genres.name) AS genres, " +
+                    "GROUP_CONCAT(DISTINCT CONCAT(stars.name, ':', stars.id) " +
+                    "ORDER BY star_counts.stars_played DESC, stars.name) AS starsWithId FROM movies m " +
+                    "LEFT JOIN ratings ra ON m.id = ra.movieId LEFT JOIN genres_in_movies gm ON m.id = " +
+                    "gm.movieId LEFT JOIN genres ON gm.genreId = genres.id LEFT JOIN stars_in_movies sm " +
+                    "ON m.id = sm.movieId LEFT JOIN stars ON sm.starId = stars.id " +
+                    "LEFT JOIN (SELECT starId, COUNT(*) AS stars_played FROM stars_in_movies GROUP BY starId) AS" +
+                    " star_counts ON stars.id = star_counts.starId WHERE m.id = ? " +
+                    "GROUP BY m.id, m.title, m.year, m.director, ra.rating, star_counts.stars_played ORDER BY star_counts.stars_played DESC;";
+
 
             // Declare our statement
             PreparedStatement statement = conn.prepareStatement(query);

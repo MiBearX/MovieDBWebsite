@@ -95,23 +95,21 @@ public class MovieListServlet extends HttpServlet {
                         query += "WHERE m.title LIKE '" + titleChar + "%' ";
                     }
                 } else { // user used search feature
-                    query += "WHERE ";
-                    boolean oneFieldNotNull = false;
+                    boolean oneFieldNotNull = movieTitle != null || movieYear != null || movieDirector != null || movieStar != null;
+                    if (oneFieldNotNull) {
+                        query += "WHERE ";
+                    }
                     if (movieTitle != null) {
                         query += "m.title LIKE CONCAT('%', '" + movieTitle + "', '%') AND ";
-                        oneFieldNotNull = true;
                     }
                     if (movieYear != null) {
                         query += "m.year = " + movieYear + " AND ";
-                        oneFieldNotNull = true;
                     }
                     if (movieDirector != null) {
                         query += "m.director LIKE CONCAT('%', '" + movieDirector + "', '%') AND ";
-                        oneFieldNotNull = true;
                     }
                     if (movieStar != null) {
                         query += "stars.name LIKE CONCAT('%', '" + movieStar + "', '%') AND ";
-                        oneFieldNotNull = true;
                     }
                     if (oneFieldNotNull) {
                         query = query.substring(0, query.length() - 4);

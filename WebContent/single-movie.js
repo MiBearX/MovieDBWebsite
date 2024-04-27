@@ -28,12 +28,27 @@ function handleSingleMovieResult(resultData) {
     row_HTML += "<th>" + '<a href="single-movie.html?id=' + resultData[0]["movie_id"] + '">' + resultData[0]["movie_title"] + '</a>' + "</th>";
     row_HTML += "<th>" + resultData[0]["movie_year"] + "</th>";
     row_HTML += "<th>" + resultData[0]["movie_director"] + "</th>";
-    row_HTML += "<th>" + resultData[0]["genres"] + "</th>";
+
+    // Handle Genres
+    let genresandId = resultData[0]["genres"].split(",");
+    row_HTML += "<th>";
+    let count = 0;
+    for (let genrePair of genresandId) {
+        let genreIdArr = genrePair.split(":");
+        let genreName = genreIdArr[0];
+        let genreId = genreIdArr[1];
+        if (count !== 0) {
+            row_HTML += ", ";
+        }
+        row_HTML += '<a href="index.html?genreId=' + genreId + '">' + genreName + '</a>';
+        count += 1;
+    }
+    row_HTML += "</th>";
 
     // Handle Stars
     let starsAndID = resultData[0]["stars"].split(",");
     row_HTML += "<th>";
-    let count = 0
+    count = 0
     for (let starIdPair of starsAndID) {
         let starIdArr = starIdPair.split(":");
         let starName = starIdArr[0];
