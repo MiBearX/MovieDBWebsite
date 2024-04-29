@@ -12,6 +12,9 @@ $(document).ready(function() {
             password: $('#password').val()
         };
 
+        // Store username in localStorage
+        localStorage.setItem('sessionusername', formData.email);
+
         $.ajax({
             type: "POST",
             url: "api/login", // Adjust if your servlet URL is different

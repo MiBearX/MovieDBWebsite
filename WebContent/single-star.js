@@ -8,7 +8,9 @@
  *      2. Use jQuery to talk to backend API to get the json data.
  *      3. Populate the data to correct html elements.
  */
-
+$('#singleStarShoppingCartBtn').click(function() {
+    window.location.href = 'cart.html';
+});
 
 /**
  * Retrieve parameter from request URL, matching by parameter name

@@ -1,3 +1,23 @@
+$(document).ready(function() {
+    $(document).on('click', '.add-to-cart', function() {
+        let movieTitle = $(this).attr('data-movieTitle');
+        let shoppingCart = JSON.parse(localStorage.getItem('shoppingCart')) || {};
+
+        if (shoppingCart.hasOwnProperty(movieTitle)) {
+            shoppingCart[movieTitle].quantity++;
+        } else {
+            shoppingCart[movieTitle] = { title: movieTitle, price: Math.random() * 100, quantity: 1 };
+        }
+
+        localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+        alert(`"${movieTitle}" has been added to your cart successfully!`);
+    });
+});
+
+$('#singleMovieShoppingCartBtn').click(function() {
+    window.location.href = 'cart.html';
+});
+
 function getParameterByName(target) {
     // Get request URL
     let url = window.location.href;
@@ -64,6 +84,7 @@ function handleSingleMovieResult(resultData) {
 
 
     row_HTML += "<th>" + resultData[0]["rating"] + "</th>";
+    row_HTML += "<th>" + '<button class="add-to-cart" data-movieTitle="' + resultData[0]["movie_title"] + '">' + "Add to Cart" + '</button>' + "</th>";
     row_HTML += "</tr>";
 
     // Append the row created to the table body, which will refresh the page

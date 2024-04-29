@@ -16,6 +16,27 @@ let movieYear = urlParams.get("year");
 let movieDirector = urlParams.get("director");
 let movieStar = urlParams.get("star")
 
+$(document).ready(function() {
+    // Event delegation for dynamically added elements
+    $(document).on('click', '.add-to-cart', function() {
+        let movieTitle = $(this).attr('data-movieTitle');
+        let shoppingCart = JSON.parse(localStorage.getItem('shoppingCart')) || {};
+
+        if (shoppingCart.hasOwnProperty(movieTitle)) {
+            shoppingCart[movieTitle].quantity++;
+        } else {
+            shoppingCart[movieTitle] = { title: movieTitle, price: Math.random() * 100, quantity: 1 };
+        }
+
+        localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+        alert(`"${movieTitle}" has been added to your cart successfully!`);
+    });
+});
+
+$('#shoppingCartBtn').click(function() {
+    window.location.href = 'cart.html';
+});
+
 $('#sortingSelect').change(function() {
     orderBy = $(this).val();
     $("#movie_list_table_body").empty();
@@ -63,7 +84,7 @@ function handleMovieListResult(resultData) {
 
 
         // Concatenate the html tags with resultData jsonObject
-        let row_HTML= "";
+        let row_HTML = "";
         row_HTML += "<tr>";
         //row_HTML += "<th>" + resultData[i]["movie_title"] + "</th>";
         row_HTML += "<th>" + '<a href="single-movie.html?id=' + resultData[i]["movie_id"] + '">' + resultData[i]["movie_title"] + '</a>' + "</th>";
@@ -107,6 +128,8 @@ function handleMovieListResult(resultData) {
 
 
         row_HTML += "<th>" + resultData[i]["rating"] + "</th>";
+        //href="cart.html?id=' + resultData[i]["movie_title"] + '"
+        row_HTML += "<th>" + '<button class="add-to-cart" data-movieTitle="' + resultData[i]["movie_title"] + '">' + "Add to Cart" + '</button>' + "</th>";
         row_HTML += "</tr>";
 
         // Append the row created to the table body, which will refresh the page
