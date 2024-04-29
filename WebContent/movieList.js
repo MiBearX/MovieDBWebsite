@@ -2,6 +2,7 @@ let currentPage = 1;
 let moviesPerPage = 10;
 let orderBy = "rating";
 let order = "DESC";
+let order2 = "ASC";
 
 
 var queryString = window.location.search;
@@ -17,7 +18,6 @@ let movieDirector = urlParams.get("director");
 let movieStar = urlParams.get("star")
 
 $(document).ready(function() {
-    // Event delegation for dynamically added elements
     $(document).on('click', '.add-to-cart', function() {
         let movieTitle = $(this).attr('data-movieTitle');
         let shoppingCart = JSON.parse(localStorage.getItem('shoppingCart')) || {};
@@ -50,6 +50,12 @@ $('#sortingOrderSelect').change(function() {
 });
 
 
+$('#sortingOrderSelect2').change(function() {
+    order2 = $(this).val();
+    $("#movie_list_table_body").empty();
+    fetchMovies();
+});
+
 $('#perPageSelect').change(function() {
     moviesPerPage = parseInt($(this).val(), 10);
     currentPage = 1; // Reset to first page
@@ -73,7 +79,6 @@ $('#prevBtn').click(function() {
 
 function handleMovieListResult(resultData) {
     console.log("handleMovieListResult: populating movie table from resultData");
-
     // Populate the star table
     // Find the empty table body by id "star_table_body"
     let movieTableBodyElement = jQuery("#movie_list_table_body");
@@ -143,7 +148,7 @@ function handleMovieListResult(resultData) {
  */
 
 function fetchMovies() {
-    let apiURL = 'api/movie_list?page=' + currentPage + '&limit=' + moviesPerPage + '&orderBy=' + orderBy + '&order=' + order;
+    let apiURL = 'api/movie_list?page=' + currentPage + '&limit=' + moviesPerPage + '&orderBy=' + orderBy + '&order=' + order + '&order2=' + order2;
     if (genreId != null) {
         apiURL += '&genreId=' + genreId;
     }
@@ -168,9 +173,19 @@ function fetchMovies() {
         method: 'GET',
         url: apiURL,
         success: function(resultData) {
-            handleMovieListResult(resultData);
+            if (resultData != null && resultData.length > 0) {
+                if (resultData[0] != null || resultData[0].length >= moviesPerPage) {
+                    $('#nextBtn').prop('disabled', resultData.length < moviesPerPage);
+                    handleMovieListResult(resultData);
+                } else {
+                    $('#nextBtn').prop('disabled', true);
+                }
+            } else {
+                $('#nextBtn').prop('disabled', true);
+            }
         },
         error: function(error) {
+            $('#nextBtn').prop('disabled', true);
             console.error('Error fetching movies:', error);
         }
     });

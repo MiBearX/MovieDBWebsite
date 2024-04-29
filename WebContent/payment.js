@@ -1,6 +1,6 @@
 $(document).ready(function() {
     $('#payment_form').submit(function(event) {
-        event.preventDefault(); // Prevent the default form submission
+        event.preventDefault();
 
         let orderDetails = JSON.parse(localStorage.getItem('orderDetails'));
 
@@ -35,23 +35,24 @@ $(document).ready(function() {
                     localStorage.setItem('saleId', data.saleId);
 
                     if (orderDetails) {
-                        // Add the new sale ID
                         orderDetails.saleId = data.saleId;
 
-                        // Save the updated details back to localStorage
                         localStorage.setItem('orderDetails', JSON.stringify(orderDetails));
                     }
 
                     window.location.replace("confirmationPage.html");
                 } else {
+                    alert("Failed to process payment. Please try again.");
                     console.log("Error: " + data.message);
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 try {
+                    alert("Failed to process payment. Please try again.");
                     var errorData = JSON.parse(jqXHR.responseText);
                     console.log("Error processing request: " + errorData.message);
                 } catch (e) {
+                    alert("Failed to process payment. Please try again.");
                     console.log("Failed to process payment. Please try again.");
                 }
             },

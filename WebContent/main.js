@@ -1,3 +1,7 @@
+$('#shoppingCartBtn').click(function() {
+    window.location.href = 'cart.html';
+});
+
 $('#searchForm').submit(function(event) {
     event.preventDefault(); // Prevent default form submission
 

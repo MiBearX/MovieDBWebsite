@@ -7,7 +7,8 @@ $(document).ready(function() {
         cartTableBody.empty();
         let totalPrice = 0;
 
-        $.each(shoppingCart, function(movieId, item) {
+        $.each(shoppingCart, function(movieTitle, item) {
+            console.log(movieTitle);
             let itemTotal = item.price * item.quantity;
             totalPrice += itemTotal;
             cartTableBody.append(`
@@ -15,12 +16,12 @@ $(document).ready(function() {
                     <td>${item.title}</td>
                     <td>$${item.price.toFixed(2)}</td>
                     <td>
-                        <button class='decrease' data-movieid='${movieId}'>-</button>
+                        <button class='decrease' data-movieid='${movieTitle}'>-</button>
                         ${item.quantity}
-                        <button class='increase' data-movieid='${movieId}'>+</button>
+                        <button class='increase' data-movieid='${movieTitle}'>+</button>
                     </td>
                     <td>$${itemTotal.toFixed(2)}</td>
-                    <td><button class='delete' data-movieid='${movieId}'>Delete</button></td>
+                    <td><button class='delete' data-movieid='${movieTitle}'>Delete</button></td>
                 </tr>
             `);
         });
@@ -33,7 +34,9 @@ $(document).ready(function() {
             shoppingCart[movieId].quantity += delta;
             if (shoppingCart[movieId].quantity <= 0) {
                 delete shoppingCart[movieId];
+                localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
             }
+            localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
             updateCartDisplay();
         }
     }
@@ -41,6 +44,7 @@ $(document).ready(function() {
     function removeItem(movieId) {
         if (shoppingCart[movieId]) {
             delete shoppingCart[movieId];
+            localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
             updateCartDisplay();
         }
     }

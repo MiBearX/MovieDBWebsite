@@ -52,6 +52,7 @@ public class MovieListServlet extends HttpServlet {
             String moviesPerPage = request.getParameter("limit");
             String orderBy = request.getParameter("orderBy");
             String order = request.getParameter("order");
+            String order2 = request.getParameter("order2");
 
             String genreId = request.getParameter("genreId");
             String titleChar = request.getParameter("titleChar");
@@ -122,10 +123,10 @@ public class MovieListServlet extends HttpServlet {
                 // sorting
                 switch (orderBy) {
                     case "title":
-                        query += "ORDER BY m.title " + order + ", ra.rating DESC LIMIT " + moviesPerPage + " OFFSET " + offset;
+                        query += "ORDER BY m.title " + order + ", ra.rating " + order2 + " LIMIT " + moviesPerPage + " OFFSET " + offset;
                         break;
                     case "rating":
-                        query += "ORDER BY ra.rating " + order + ", m.title ASC LIMIT " + moviesPerPage + " OFFSET " + offset;
+                        query += "ORDER BY ra.rating " + order + ", m.title " + order2 + " LIMIT " + moviesPerPage + " OFFSET " + offset;
                         break;
                     default:
                         query += "ORDER BY ra.rating DESC LIMIT " + moviesPerPage + " OFFSET " + offset;
