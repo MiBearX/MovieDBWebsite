@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Order Confirmation</title>
+  <link rel="stylesheet" href="confirmationPage.css">
+</head>
+<body>
+<h1>Order Confirmation</h1>
+<div id="order_details">
+  <h2>Loading order details...</h2>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    displayOrderDetails();
+
+    function displayOrderDetails() {
+      const orderDetailsRaw = localStorage.getItem('orderDetails');
+      if (!orderDetailsRaw) {
+        document.getElementById('order_details').innerHTML = '<p>No order details available. Please ensure you are accessing this page from a valid session.</p>';
+        return;
+      }
+
+      let orderDetails;
+      try {
+        orderDetails = JSON.parse(orderDetailsRaw);
+      } catch (e) {
+        console.error('Error parsing order details:', e);
+        document.getElementById('order_details').innerHTML = '<p>Error loading order details. Please check the data format.</p>';
+        return;
+      }
+
+      if (!Array.isArray(orderDetails.movies)) {
+        console.error('Expected movies to be an array but received:', orderDetails.movies);
+        orderDetails.movies = Object.keys(orderDetails.movies).map(key => orderDetails.movies[key]);
+      }
+
+      const saleDate = orderDetails.saleDate ? new Date(orderDetails.saleDate).toLocaleDateString() : 'Date not available';
+
+      const detailsHTML = `
+            <h3>Sale ID: ${orderDetails.saleId}</h3>
+            <p>Date: ${saleDate}</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Movie Title</th>
+                        <th>Quantity</th>
+                        <th>Price Each</th>
+                        <th>Total Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${orderDetails.movies.map(movie => `
+                        <tr>
+                            <td>${movie.title}</td>
+                            <td>${movie.quantity}</td>
+                            <td>$${movie.price.toFixed(2)}</td>
+                            <td>$${(movie.price * movie.quantity).toFixed(2)}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            <h4>Total Order Cost: $${orderDetails.totalCost.toFixed(2)}</h4>
+        `;
+      document.getElementById('order_details').innerHTML = detailsHTML;
+    }
+  });
+
+</script>
+</body>
+</html>

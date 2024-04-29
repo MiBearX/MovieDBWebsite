@@ -18,7 +18,6 @@ import java.sql.SQLException;
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
-    // Create a dataSource which registered in web.xml
     private DataSource dataSource;
 
     public void init(ServletConfig config) {
@@ -42,7 +41,6 @@ public class LoginServlet extends HttpServlet {
 
                 try (ResultSet rs = statement.executeQuery()) {
                     if (rs.next()) {
-                        // Assume User class exists and manages user session information
                         request.getSession().setAttribute("user", new User(email));
                         request.getSession().setAttribute("isLoggedIn", true);
                         response.getWriter().write("{\"status\": \"success\", \"message\": \"Login successful\"}");

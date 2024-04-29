@@ -19,12 +19,10 @@ $('#singleMovieShoppingCartBtn').click(function() {
 });
 
 function getParameterByName(target) {
-    // Get request URL
     let url = window.location.href;
     // Encode target parameter name to url encoding
     target = target.replace(/[\[\]]/g, "\\$&");
 
-    // Ues regular expression to find matched parameter value
     let regex = new RegExp("[?&]" + target + "(=([^&#]*)|&|#|$)"),
         results = regex.exec(url);
     if (!results) return null;

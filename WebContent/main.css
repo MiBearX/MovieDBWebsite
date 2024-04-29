@@ -1,0 +1,67 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+section {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Search Section Styles */
+#searchForm label {
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+}
+
+#searchForm input[type="text"],
+#searchForm input[type="number"],
+#searchForm button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#searchForm button {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+#searchForm button:hover {
+    background-color: #0056b3;
+}
+
+/* Browse Section Styles */
+#browse div {
+    margin-bottom: 20px;
+}
+
+#genreList, #titleList {
+    list-style: none;
+    padding: 0;
+}
+
+#genreList li, #titleList li {
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+#genreList li:hover, #titleList li:hover {
+    text-decoration: underline;
+    color: #007bff;
+}

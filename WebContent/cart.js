@@ -32,7 +32,7 @@ $(document).ready(function() {
         if (shoppingCart[movieId]) {
             shoppingCart[movieId].quantity += delta;
             if (shoppingCart[movieId].quantity <= 0) {
-                delete shoppingCart[movieId]; // Remove the item if quantity is 0 or less
+                delete shoppingCart[movieId];
             }
             updateCartDisplay();
         }
@@ -46,7 +46,7 @@ $(document).ready(function() {
     }
 
     $('#proceed_to_payment').click(function() {
-        window.location.href = 'payment.html'; // Redirect to Payment Page
+        window.location.href = 'payment.html';
     });
 
     $('#cart_table').on('click', '.increase', function() {
