@@ -46,7 +46,7 @@ public class MovieListServlet extends HttpServlet {
         try (Connection conn = dataSource.getConnection()) {
 
             // Declare our statement
-            Statement statement = conn.createStatement();
+            //Statement statement = conn.createStatement();
 
             String currentPage = request.getParameter("page");
             String moviesPerPage = request.getParameter("limit");
@@ -61,6 +61,14 @@ public class MovieListServlet extends HttpServlet {
             String movieYear = request.getParameter("year");
             String movieDirector = request.getParameter("director");
             String movieStar = request.getParameter("star");
+            boolean oneFieldNotNull = movieTitle != null || movieYear != null || movieDirector != null || movieStar != null;
+            boolean browseByGenre = false;
+            boolean browseByTitle = false;
+            boolean userSearch = false;
+            int current_page = Integer.parseInt(currentPage);
+            int movies_per_page = Integer.parseInt(moviesPerPage);
+            int offset = (current_page - 1) * movies_per_page;
+            String offsetString = String.valueOf(offset);
 
 
             // build query
@@ -75,10 +83,6 @@ public class MovieListServlet extends HttpServlet {
                         "LEFT JOIN stars ON sm.starId = stars.id GROUP BY m.id, m.title, m.year, m.director, ra.rating " +
                         "ORDER BY ra.rating DESC LIMIT 20 OFFSET 0";
             } else {
-                int current_page = Integer.parseInt(currentPage);
-                int movies_per_page = Integer.parseInt(moviesPerPage);
-                int offset = (current_page - 1) * movies_per_page;
-
                 query = "SELECT m.id, m.title, m.year, m.director, ra.rating," +
                         "GROUP_CONCAT(DISTINCT CONCAT(genres.name, ':', genres.id) ORDER BY genres.name) AS genres, " +
                         "GROUP_CONCAT(DISTINCT CONCAT(stars.name, ':', stars.id) ORDER BY stars_played DESC, stars.name) AS starsWithId FROM movies m " +
@@ -88,33 +92,35 @@ public class MovieListServlet extends HttpServlet {
                         "FROM stars_in_movies GROUP BY starId) AS star_counts ON stars.id = star_counts.starId ";
 
                 if (genreId != null) {
-                    query += "WHERE gm.genreId = " + genreId + " ";
+                    query += "WHERE gm.genreId = ? ";
+                    browseByGenre = true;
                 } else if (titleChar != null) { // assume you can't filter by genre and title at the same time
                     if (titleChar.equals("*")) {
                         query += "WHERE NOT m.title REGEXP '^[a-zA-Z0-9]' ";
                     } else {
-                        query += "WHERE m.title LIKE '" + titleChar + "%' ";
+                        query += "WHERE m.title LIKE ? ";
                     }
+                    browseByTitle = true;
                 } else { // user used search feature
-                    boolean oneFieldNotNull = movieTitle != null || movieYear != null || movieDirector != null || movieStar != null;
                     if (oneFieldNotNull) {
                         query += "WHERE ";
                     }
                     if (movieTitle != null) {
-                        query += "m.title LIKE CONCAT('%', '" + movieTitle + "', '%') AND ";
+                        query += "m.title LIKE CONCAT('%', ?, '%') AND ";
                     }
                     if (movieYear != null) {
-                        query += "m.year = " + movieYear + " AND ";
+                        query += "m.year = ? AND ";
                     }
                     if (movieDirector != null) {
-                        query += "m.director LIKE CONCAT('%', '" + movieDirector + "', '%') AND ";
+                        query += "m.director LIKE CONCAT('%', ?, '%') AND ";
                     }
                     if (movieStar != null) {
-                        query += "stars.name LIKE CONCAT('%', '" + movieStar + "', '%') AND ";
+                        query += "stars.name LIKE CONCAT('%', ?, '%') AND ";
                     }
                     if (oneFieldNotNull) {
                         query = query.substring(0, query.length() - 4);
                     }
+                    userSearch = true;
                 }
 
                 query +="GROUP BY m.id, m.title, m.year, m.director, ra.rating ";
@@ -123,19 +129,63 @@ public class MovieListServlet extends HttpServlet {
                 // sorting
                 switch (orderBy) {
                     case "title":
-                        query += "ORDER BY m.title " + order + ", ra.rating " + order2 + " LIMIT " + moviesPerPage + " OFFSET " + offset;
+                        query += "ORDER BY m.title " + order + ", ra.rating " + order2 + " LIMIT ? OFFSET ?";
                         break;
                     case "rating":
-                        query += "ORDER BY ra.rating " + order + ", m.title " + order2 + " LIMIT " + moviesPerPage + " OFFSET " + offset;
+                        query += "ORDER BY ra.rating " + order + ", m.title " + order2 + " LIMIT ? OFFSET ?";
                         break;
                     default:
-                        query += "ORDER BY ra.rating DESC LIMIT " + moviesPerPage + " OFFSET " + offset;
+                        query += "ORDER BY ra.rating DESC LIMIT ? OFFSET ?";
+
                         break;
                 }
             }
+            System.out.println(query);
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+            if (browseByGenre) {
+                preparedStatement.setString(1, genreId);
+                preparedStatement.setInt(2, movies_per_page);
+                preparedStatement.setInt(3, offset);
+            } else if (browseByTitle) {
+                if (titleChar.equals("*")) {
+                    preparedStatement.setInt(1, movies_per_page);
+                    preparedStatement.setInt(2, offset);
+                } else {
+                    preparedStatement.setString(1, titleChar + "%");
+                    preparedStatement.setInt(2, movies_per_page);
+                    preparedStatement.setInt(3, offset);
+                }
+            } else if (userSearch) {
+                if (!oneFieldNotNull) {
+                    preparedStatement.setInt(1, movies_per_page);
+                    preparedStatement.setInt(2, offset);
+                } else {
+                    int statementIndex = 1;
+                    if (movieTitle != null) {
+                        preparedStatement.setString(statementIndex, movieTitle);
+                        statementIndex++;
+                    }
+                    if (movieYear != null) {
+                        preparedStatement.setString(statementIndex, movieYear);
+                        statementIndex++;
+                    }
+                    if (movieDirector != null) {
+                        preparedStatement.setString(statementIndex, movieDirector);
+                        statementIndex++;
+                    }
+                    if (movieStar != null) {
+                        preparedStatement.setString(statementIndex, movieStar);
+                        statementIndex++;
+                    }
+                    preparedStatement.setInt(statementIndex, movies_per_page);
+                    statementIndex++;
+                    preparedStatement.setInt(statementIndex, offset);
+                }
+            }
+
 
             // Perform the query
-            ResultSet rs = statement.executeQuery(query);
+            ResultSet rs = preparedStatement.executeQuery();
 
             JsonArray jsonArray = new JsonArray();
 
@@ -175,7 +225,7 @@ public class MovieListServlet extends HttpServlet {
                 jsonArray.add(jsonObject);
             }
             rs.close();
-            statement.close();
+            preparedStatement.close();
 
             // Log to localhost log
             request.getServletContext().log("getting " + jsonArray.size() + " results");

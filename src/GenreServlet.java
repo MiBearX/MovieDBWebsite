@@ -46,12 +46,12 @@ public class GenreServlet extends HttpServlet {
         try (Connection conn = dataSource.getConnection()) {
 
             // Declare our statement
-            Statement statement = conn.createStatement();
+            //Statement statement = conn.createStatement();
 
 
             // build query
             String query = "SELECT id, name FROM genres ORDER BY name ASC";
-
+            PreparedStatement statement = conn.prepareStatement(query);
 
 
 
