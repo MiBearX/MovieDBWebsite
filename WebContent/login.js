@@ -2,9 +2,17 @@ $(document).ready(function() {
     $('#login_form').submit(function(event) {
         event.preventDefault(); // Prevent the default form submission
 
+        var recaptchaResponse = $('#g-recaptcha-response').val();
+
+        if (!recaptchaResponse) {
+            $('#error_message').text("Please complete the reCAPTCHA challenge.");
+            return;
+        }
+
         var formData = {
             email: $('#email').val(),
-            password: $('#password').val()
+            password: $('#password').val(),
+            'g-recaptcha-response': recaptchaResponse
         };
 
         // Store username in localStorage
