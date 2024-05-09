@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/api/login")
 public class LoginServlet extends HttpServlet {
@@ -34,7 +35,6 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String recaptchaResponse = request.getParameter("g-recaptcha-response"); // Extract reCAPTCHA token
-
         PrintWriter out = response.getWriter();
         try {
             RecaptchaVerifyUtils.verify(recaptchaResponse);
@@ -53,16 +53,21 @@ public class LoginServlet extends HttpServlet {
 
 
         try (Connection conn = dataSource.getConnection()) {
-            String query = "SELECT * FROM customers WHERE email = ? AND password = ?";
+            String query = "SELECT * FROM customers WHERE email = ?";
             try (PreparedStatement statement = conn.prepareStatement(query)) {
                 statement.setString(1, email);
-                statement.setString(2, password);
 
                 try (ResultSet rs = statement.executeQuery()) {
                     if (rs.next()) {
-                        request.getSession().setAttribute("user", new User(email));
-                        request.getSession().setAttribute("isLoggedIn", true);
-                        response.getWriter().write("{\"status\": \"success\", \"message\": \"Login successful\"}");
+                        String encryptedPassword = rs.getString("password");
+                        boolean success = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
+                        if (!success) {
+                            response.getWriter().write("{\"status\": \"fail\", \"message\": \"Invalid password\"}");
+                        } else {
+                            request.getSession().setAttribute("user", new User(email));
+                            request.getSession().setAttribute("isLoggedIn", true);
+                            response.getWriter().write("{\"status\": \"success\", \"message\": \"Login successful\"}");
+                        }
                     } else {
                         response.getWriter().write("{\"status\": \"fail\", \"message\": \"Invalid email or password\"}");
                     }

@@ -30,6 +30,7 @@ $(document).ready(function() {
                     window.location.replace("main.html"); // Redirect to Main Page
                 } else {
                     $('#error_message').text(data.message); // Show error message
+                    grecaptcha.reset();
                 }
             },
             error: function() {
