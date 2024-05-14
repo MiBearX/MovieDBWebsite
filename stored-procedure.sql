@@ -21,26 +21,27 @@ BEGIN
     ELSE
         SELECT id INTO v_star_id FROM stars WHERE name = p_star_name LIMIT 1;
         IF v_star_id IS NULL THEN
-            INSERT INTO stars (id, name, birthYear)
-            VALUES (CONCAT('nm', LPAD((SELECT CAST(SUBSTRING(MAX(id), 3) AS UNSIGNED) + 1 FROM stars), 7, '0')), p_star_name, p_star_birthYear);
-            SELECT LAST_INSERT_ID() INTO v_star_id;
+            SET @max_star_id = (SELECT MAX(CAST(SUBSTRING(id, 3) AS UNSIGNED)) FROM stars);
+            IF @max_star_id IS NULL THEN
+                SET @max_star_id = 0;
+            END IF;
+            SET v_star_id = CONCAT('nm', LPAD(@max_star_id + 1, 7, '0'));
+            INSERT INTO stars (id, name, birthYear) VALUES (v_star_id, p_star_name, p_star_birthYear);
         END IF;
 
         SELECT id INTO v_genre_id FROM genres WHERE name = p_genre_name LIMIT 1;
+
         IF v_genre_id IS NULL THEN
             INSERT INTO genres (name) VALUES (p_genre_name);
             SELECT LAST_INSERT_ID() INTO v_genre_id;
         END IF;
 
-        CREATE TEMPORARY TABLE temp_movie_id AS
-        SELECT CONCAT('tt', LPAD((SELECT CAST(SUBSTRING(MAX(id), 3) AS UNSIGNED) + 1 FROM movies), 7, '0')) AS new_id;
-
-        INSERT INTO movies (id, title, year, director)
-        SELECT new_id, p_title, p_year, p_director FROM temp_movie_id;
-
-        SELECT new_id INTO v_movie_id FROM temp_movie_id;
-
-        DROP TEMPORARY TABLE IF EXISTS temp_movie_id;
+        SET @max_movie_id = (SELECT MAX(CAST(SUBSTRING(id, 3) AS UNSIGNED)) FROM movies);
+        IF @max_movie_id IS NULL THEN
+            SET @max_movie_id = 0;
+        END IF;
+        SET v_movie_id = CONCAT('tt', LPAD(@max_movie_id + 1, 7, '0'));
+        INSERT INTO movies (id, title, year, director) VALUES (v_movie_id, p_title, p_year, p_director);
 
         INSERT INTO stars_in_movies (starId, movieId) VALUES (v_star_id, v_movie_id);
         INSERT INTO genres_in_movies (genreId, movieId) VALUES (v_genre_id, v_movie_id);
