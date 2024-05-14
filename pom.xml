@@ -27,6 +27,12 @@
             <artifactId>jasypt</artifactId>
             <version>1.9.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.4.0</version>
+            <scope>compile</scope> <!-- This scope allows it to be included during the compile phase -->
+        </dependency>
     </dependencies>
     <build>
         <finalName>cs122b-project1-api-example</finalName>
@@ -43,6 +49,15 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
                     <warSourceDirectory>WebContent</warSourceDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <!-- Specify your main class here -->
+                    <mainClass>UpdateXMLServlet</mainClass> <!-- Update with your package and class -->
                 </configuration>
             </plugin>
         </plugins>
