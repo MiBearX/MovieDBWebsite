@@ -20,17 +20,17 @@ public class MovieDataLoader {
         // Setup and parse the main_example.xml
         XMLReader xmlReader1 = XMLReaderFactory.createXMLReader();
         xmlReader1.setContentHandler(mainHandler);
-        xmlReader1.parse("/Users/michaelxiong/Documents/CS122B/cs122b-project1-api-example/mains243.xml");
+        xmlReader1.parse("/home/ubuntu/cs122b-s24-crackedcoders/mains243.xml");
 
         // Setup and parse the example.xml for actors
         XMLReader xmlReader2 = XMLReaderFactory.createXMLReader();
         xmlReader2.setContentHandler(actorsHandler);
-        xmlReader2.parse("/Users/michaelxiong/Documents/CS122B/cs122b-project1-api-example/actors63.xml");
+        xmlReader2.parse("/home/ubuntu/cs122b-s24-crackedcoders/actors63.xml");
 
         // Setup and parse the casts_example.xml
         XMLReader xmlReader3 = XMLReaderFactory.createXMLReader();
         xmlReader3.setContentHandler(castsHandler);
-        xmlReader3.parse("/Users/michaelxiong/Documents/CS122B/cs122b-project1-api-example/casts124.xml");
+        xmlReader3.parse("/home/ubuntu/cs122b-s24-crackedcoders/casts124.xml");
 
         // Aggregate skipped entries
         allSkippedEntries.addAll(mainHandler.getSkippedFilms());
