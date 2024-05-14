@@ -43,7 +43,6 @@ BEGIN
         DROP TEMPORARY TABLE IF EXISTS temp_movie_id;
 
         INSERT INTO stars_in_movies (starId, movieId) VALUES (v_star_id, v_movie_id);
-
         INSERT INTO genres_in_movies (genreId, movieId) VALUES (v_genre_id, v_movie_id);
 
         SELECT 'Movie added successfully.' AS message;
