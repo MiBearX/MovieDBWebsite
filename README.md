@@ -1,7 +1,7 @@
 ## CS 122B Project 2
 
 ## Demo Link
-https://youtu.be/Z0Wty2ZER1g
+https://www.youtube.com/watch?v=MYRhCD4bErM
 
 ## Contribution
 
@@ -11,4 +11,4 @@ https://youtu.be/Z0Wty2ZER1g
 
 Prepared Statements used in every servlet that connects to MySQL.
 
-Optimized with Batch inserts and hashmaps.
+Optimized parser with Batch inserts and hashmaps.
