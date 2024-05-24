@@ -61,6 +61,8 @@ public class MovieListServlet extends HttpServlet {
             String movieYear = request.getParameter("year");
             String movieDirector = request.getParameter("director");
             String movieStar = request.getParameter("star");
+            String titleQuery = request.getParameter("titleQuery");
+
             boolean oneFieldNotNull = movieTitle != null || movieYear != null || movieDirector != null || movieStar != null;
             boolean browseByGenre = false;
             boolean browseByTitle = false;
@@ -104,6 +106,8 @@ public class MovieListServlet extends HttpServlet {
                 } else { // user used search feature
                     if (oneFieldNotNull) {
                         query += "WHERE ";
+                    } else { // all null except titleQuery
+                        query += "WHERE MATCH(m.title) AGAINST(? IN BOOLEAN MODE)";
                     }
                     if (movieTitle != null) {
                         query += "m.title LIKE CONCAT('%', ?, '%') AND ";
@@ -157,8 +161,16 @@ public class MovieListServlet extends HttpServlet {
                 }
             } else if (userSearch) {
                 if (!oneFieldNotNull) {
-                    preparedStatement.setInt(1, movies_per_page);
-                    preparedStatement.setInt(2, offset);
+                    int statementIndex = 1;
+                    if (titleQuery != null) {
+                        String[] queryWords = titleQuery.split(" ");
+                        String searchQuery = String.join("* ", queryWords) + "*";
+                        preparedStatement.setString(statementIndex, searchQuery);
+                        statementIndex++;
+                    }
+                    preparedStatement.setInt(statementIndex, movies_per_page);
+                    statementIndex++;
+                    preparedStatement.setInt(statementIndex, offset);
                 } else {
                     int statementIndex = 1;
                     if (movieTitle != null) {

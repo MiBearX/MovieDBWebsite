@@ -15,7 +15,8 @@ let titleChar = urlParams.get('titleChar');
 let movieTitle = urlParams.get("title");
 let movieYear = urlParams.get("year");
 let movieDirector = urlParams.get("director");
-let movieStar = urlParams.get("star")
+let movieStar = urlParams.get("star");
+let titleQuery = urlParams.get("titleQuery");
 
 $(document).ready(function() {
     $(document).on('click', '.add-to-cart', function() {
@@ -166,6 +167,9 @@ function fetchMovies() {
     }
     if (movieStar != null) {
         apiURL += '&star=' + movieStar;
+    }
+    if (titleQuery != null) {
+        apiURL += '&titleQuery=' + titleQuery;
     }
 
     $.ajax({

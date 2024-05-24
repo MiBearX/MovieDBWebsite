@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="main.css">
 </head>
 <body>
 
@@ -29,6 +31,14 @@
         <button type="submit">Search</button>
     </form>
 </section>
+<div class="container">
+    <form id="fullTextForm">
+        <input type="text" name="hero" id="autocomplete"
+               class="autocomplete-searchbox form-control"
+               placeholder="Search for movie titles"/>
+        <button type="submit">Search</button>
+    </form>
+</div>
 
 <!-- Browse Section -->
 <section id="browse">
@@ -46,6 +56,8 @@
 
 <!-- Script Section (jQuery is used for simplicity) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- include jquery autocomplete JS  -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.devbridge-autocomplete/1.4.11/jquery.autocomplete.min.js"></script>
 <script src="main.js"></script>
 </body>
 </html>
