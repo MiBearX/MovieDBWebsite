@@ -16,7 +16,7 @@ public class PlaceOrderServlet extends HttpServlet {
         try {
             javax.naming.Context initCtx = new javax.naming.InitialContext();
             javax.naming.Context envCtx = (javax.naming.Context) initCtx.lookup("java:comp/env");
-            dataSource = (DataSource) envCtx.lookup("jdbc/moviedbexample");
+            dataSource = (DataSource) envCtx.lookup("jdbc/master");
         } catch (Exception e) {
             throw new ServletException("DB connection error: " + e.getMessage(), e);
         }
