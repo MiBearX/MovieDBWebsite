@@ -3,3 +3,7 @@
 target/
 src/StarsServlet.java
 WebContent/index.js
+actors63.xml
+casts124.xml
+mains243.xml
+*.sql
