@@ -4,8 +4,8 @@
 - 110 on Spreadsheet
 
 ## Demo Link
-https://youtu.be/uFAYYt_f5Uk
-I showed the network tab in demo, but my JS console logs show query initation, suggestion list, and whether it comes from cache.
+- https://youtu.be/uFAYYt_f5Uk
+- I showed the network tab in demo, but my JS console logs show query initation, suggestion list, and whether it comes from cache.
 
 ## Deployment
 - Deploy normally, make sure to change movie table title column to full text.
