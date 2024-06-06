@@ -16,7 +16,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import org.jasypt.util.password.StrongPasswordEncryptor;
 
 @WebServlet(name = "DashboardServlet", urlPatterns = "/api/dashboard")
 public class DashboardServlet extends HttpServlet {
@@ -61,8 +60,8 @@ public class DashboardServlet extends HttpServlet {
 
                 try (ResultSet rs = statement.executeQuery()) {
                     if (rs.next()) {
-                        String encryptedPassword = rs.getString("password");
-                        boolean success = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
+                        String truePassword = rs.getString("password");
+                        boolean success = password.equals(truePassword);
                         if (!success) {
                             response.getWriter().write("{\"status\": \"fail\", \"message\": \"Invalid password\"}");
                         } else { // happy path
