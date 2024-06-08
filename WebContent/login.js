@@ -4,10 +4,10 @@ $(document).ready(function() {
 
         var recaptchaResponse = $('#g-recaptcha-response').val();
 
-        if (!recaptchaResponse) {
+        /*if (!recaptchaResponse) {
             $('#error_message').text("Please complete the reCAPTCHA challenge.");
             return;
-        }
+        }*/
 
         var formData = {
             email: $('#email').val(),
