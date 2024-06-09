@@ -1,14 +1,17 @@
-## CS 122B Project 4
+## CS 122B Project 5
 
 ## Team Number
 - 110 on Spreadsheet
 
 ## Demo Link
-- https://youtu.be/uFAYYt_f5Uk
-- I showed the network tab in demo, but my JS console logs show query initation, suggestion list, and whether it comes from cache.
+- https://youtu.be/lr0H0Nv98Bs
+
+## Jmeter tests
+- 1 Control Plane + 3 Worker nodes + 1 master MySQL pod + 1 slave MySQL pod + 2 Fabflix pods: 3,525.057/minute
+- 1 Control Plane + 4 Worker nodes + 1 master MySQL pod + 1 slave MySQL pod + 3 Fabflix pods: 522.43/minute
 
 ## Deployment
-- Deploy normally, make sure to change movie table title column to full text.
+- Deploy normally, make sure to change movie table title column to full text and unencrypt passwords.
 
 ## Contribution
 - Michael Xiong - Everything for P4
