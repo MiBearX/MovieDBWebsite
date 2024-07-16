@@ -16,7 +16,7 @@ public class AddMovieServlet extends HttpServlet {
 
     public void init() throws ServletException {
         try {
-            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/master");
+            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedbexample");
         } catch (NamingException e) {
             throw new ServletException("Error initializing data source", e);
         }

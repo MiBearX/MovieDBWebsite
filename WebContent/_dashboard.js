@@ -25,7 +25,11 @@ $(document).ready(function() {
             data: formData,
             success: function(data) {
                 if (data != null) {
-                    //window.location.replace("main.html"); // Redirect to Main Page
+                    if (data.status === "fail") {
+                        $('#error_message').text(data.message); // Show error message
+                        grecaptcha.reset();
+                        return;
+                    }
                     $('#employee_login').hide();
                     $('#dashboard').show();
                     displayDashboard(data);

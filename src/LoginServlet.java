@@ -34,22 +34,23 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("application/json"); // MIME type for JSON response
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        //String recaptchaResponse = request.getParameter("g-recaptcha-response"); // Extract reCAPTCHA token
+        String recaptchaResponse = request.getParameter("g-recaptcha-response"); // Extract reCAPTCHA token
         PrintWriter out = response.getWriter();
-        /*try {
+        try {
             RecaptchaVerifyUtils.verify(recaptchaResponse);
         } catch (Exception e) {
-            out.println("<html>");
+            /*out.println("<html>");
             out.println("<head><title>Error</title></head>");
             out.println("<body>");
             out.println("<p>recaptcha verification error</p>");
             out.println("<p>" + e.getMessage() + "</p>");
             out.println("</body>");
-            out.println("</html>");
+            out.println("</html>");*/
+            response.getWriter().write("{\"status\": \"fail\", \"message\": \"Recaptcha not completed.\"}");
 
             out.close();
             return;
-        }*/
+        }
 
 
         try (Connection conn = dataSource.getConnection()) {

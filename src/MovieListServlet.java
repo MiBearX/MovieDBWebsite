@@ -107,7 +107,9 @@ public class MovieListServlet extends HttpServlet {
                     if (oneFieldNotNull) {
                         query += "WHERE ";
                     } else { // all null except titleQuery
-                        query += "WHERE MATCH(m.title) AGAINST(? IN BOOLEAN MODE)";
+                        if (titleQuery != null) {
+                            query += "WHERE MATCH(m.title) AGAINST(? IN BOOLEAN MODE)";
+                        }
                     }
                     if (movieTitle != null) {
                         query += "m.title LIKE CONCAT('%', ?, '%') AND ";
@@ -195,7 +197,7 @@ public class MovieListServlet extends HttpServlet {
                 }
             }
 
-
+            System.out.println(query);
             // Perform the query
             ResultSet rs = preparedStatement.executeQuery();
 
