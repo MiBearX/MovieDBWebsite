@@ -60,8 +60,10 @@ public class LoginServlet extends HttpServlet {
 
                 try (ResultSet rs = statement.executeQuery()) {
                     if (rs.next()) {
-                        String truePassword = rs.getString("password");
-                        boolean success = password.equals(truePassword);
+                        /*String truePassword = rs.getString("password");
+                        boolean success = password.equals(truePassword);*/
+                        String encryptedPassword = rs.getString("password");
+                        boolean success = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
                         if (!success) {
                             response.getWriter().write("{\"status\": \"fail\", \"message\": \"Invalid password\"}");
                         } else {

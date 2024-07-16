@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.ServletException;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -60,8 +61,10 @@ public class DashboardServlet extends HttpServlet {
 
                 try (ResultSet rs = statement.executeQuery()) {
                     if (rs.next()) {
-                        String truePassword = rs.getString("password");
-                        boolean success = password.equals(truePassword);
+                        /*String truePassword = rs.getString("password");
+                        boolean success = password.equals(truePassword);*/
+                        String encryptedPassword = rs.getString("password");
+                        boolean success = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
                         if (!success) {
                             response.getWriter().write("{\"status\": \"fail\", \"message\": \"Invalid password\"}");
                         } else { // happy path
