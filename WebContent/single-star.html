@@ -1,10 +1,3 @@
-<!-- This example is following frontend and backend separation.
-
-    This .html performs two steps:
-    1. Create a html template skeleton, with all the elements defined (some left empty) and named with ids.
-    2. Load single-star.js to populate the data into empty elements.
-    -->
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -18,32 +11,73 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <title>Single Star</title>
+    <style>
+        /* Custom Styles */
+        .header-container {
+            width: 100%;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.75rem;
+            color: #343a40;
+        }
+        .header .btn-primary {
+            background-color: #6c757d;
+            border: none;
+            font-size: 1rem;
+            padding: 10px 20px;
+        }
+        .header .btn-primary:hover {
+            background-color: #5a6268;
+        }
+        .table {
+            margin-top: 20px;
+        }
+        .btn-secondary {
+            margin-right: 5px;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+    </style>
 </head>
 <body>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Single Star Page</h1>
-    <a href="index.html" class="btn btn-primary">Browse Movies</a>
-    <button id="singleStarShoppingCartBtn" class="btn btn-secondary">Checkout</button>
+<div class="header-container">
+    <div class="header">
+        <h1>Single Star Page</h1>
+        <a href="index.html" class="btn btn-primary">Browse Movies</a>
+        <button id="singleStarShoppingCartBtn" class="btn btn-secondary">Checkout</button>
+    </div>
 </div>
 
-<!-- H3 body is left empty here, will be populated with the data retrieved with single-star.js -->
-<!-- single-star.js will find this html element by it's id "star_info" -->
-<h3 id="star_info"></h3>
-<table id=movie_table class="table table-striped">
-    <thead>
-    <tr>
-        <th>Movie Title</th>
-        <th>Release Year</th>
-        <th>Director</th>
-        <th>
-    </tr>
-    </thead>
-
-    <!-- Table body is left empty here, will be populated with the data retrieved with single-star.js -->
-    <!-- single-star.js will find this html element by it's id "movie_table_body" -->
-    <tbody id=movie_table_body></tbody>
-</table>
+<div class="container">
+    <!-- H3 body is left empty here, will be populated with the data retrieved with single-star.js -->
+    <!-- single-star.js will find this html element by its id "star_info" -->
+    <h3 id="star_info"></h3>
+    <table id="movie_table" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Movie Title</th>
+            <th>Release Year</th>
+            <th>Director</th>
+        </tr>
+        </thead>
+        <!-- Table body is left empty here, will be populated with the data retrieved with single-star.js -->
+        <!-- single-star.js will find this html element by its id "movie_table_body" -->
+        <tbody id="movie_table_body"></tbody>
+    </table>
+</div>
 
 <!-- Load jQuery and Bootstrap JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -56,6 +90,4 @@
      otherwise the url is relative to the root path-->
 <script src="single-star.js"></script>
 </body>
-
-
 </html>

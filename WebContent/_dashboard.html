@@ -8,63 +8,136 @@
     <script src='https://code.jquery.com/jquery-3.1.0.min.js'></script>
     <script src='https://www.google.com/recaptcha/api.js' type="text/javascript"></script>
     <script src="_dashboard.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .dashboard-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #343a40;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            width: 150px;
+            margin-right: 10px;
+            color: #666;
+        }
+        .form-group input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .g-recaptcha {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 <body>
 <div class="container" id="employee_login">
     <h2>Employee Login</h2>
     <form id="employee_login_form">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
         <button type="submit">Login</button>
         <p id="error_message" style="color:red;"></p>
         <div class="g-recaptcha" data-sitekey="6LcJSNUpAAAAAKuUNtRmPzWOfjsSlKN9VvCyDW6S"></div>
     </form>
 </div>
 
-<div id="dashboard" hidden>
-    <table id=db_metadata_table class="table table-striped">
+<div id="dashboard" hidden style="padding-top: 20px; padding-bottom: 20px;">
+    <table id="db_metadata_table" class="table table-striped" style="padding-top: 20px; padding-bottom: 20px;">
         <thead>
         <tr>
-            <!-- Titles of each column-->
             <th>Database Metadata</th>
         </tr>
         </thead>
-
-        <tbody id=db_metadata_table_body></tbody>
+        <tbody id="db_metadata_table_body"></tbody>
     </table>
     <h2>Insert a new Star</h2>
     <form id="insertStarForm">
-        <label for="starName">Star's Name:</label>
-        <input type="text" id="starName" name="starName">
-
-        <label for="starYear">Star's Birth Year</label>
-        <input type="text" id="starYear" name="starYear">
-
+        <div class="form-group">
+            <label for="starName">Star's Name:</label>
+            <input type="text" id="starName" name="starName">
+        </div>
+        <div class="form-group">
+            <label for="starYear">Star's Birth Year:</label>
+            <input type="text" id="starYear" name="starYear">
+        </div>
         <button type="submit">Insert Star</button>
     </form>
 
     <h2>Add a new Movie</h2>
     <form id="addMovieForm" action="/api/addMovie" method="post">
-        <label for="title">Movie Title:</label>
-        <input type="text" id="title" name="title" required><br>
-
-        <label for="year">Movie Year:</label>
-        <input type="number" id="year" name="year" required><br>
-
-        <label for="director">Director:</label>
-        <input type="text" id="director" name="director" required><br>
-
-        <label for="starName">Star's Name:</label>
-        <input type="text" id="mStarName" name="starName" required><br>
-
-        <label for="starBirthYear">Star's Birth Year:</label>
-        <input type="number" id="starBirthYear" name="starBirthYear"><br>
-
-        <label for="genreName">Genre Name:</label>
-        <input type="text" id="genreName" name="genreName" required><br>
-
+        <div class="form-group">
+            <label for="title">Movie Title:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="year">Movie Year:</label>
+            <input type="number" id="year" name="year" required>
+        </div>
+        <div class="form-group">
+            <label for="director">Director:</label>
+            <input type="text" id="director" name="director" required>
+        </div>
+        <div class="form-group">
+            <label for="mStarName">Star's Name:</label>
+            <input type="text" id="mStarName" name="starName" required>
+        </div>
+        <div class="form-group">
+            <label for="starBirthYear">Star's Birth Year:</label>
+            <input type="number" id="starBirthYear" name="starBirthYear">
+        </div>
+        <div class="form-group">
+            <label for="genreName">Genre Name:</label>
+            <input type="text" id="genreName" name="genreName" required>
+        </div>
         <button type="submit">Add Movie</button>
     </form>
 </div>

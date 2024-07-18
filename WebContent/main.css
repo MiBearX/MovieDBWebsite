@@ -154,11 +154,17 @@ html, body {
 }
 
 #genreList li, #titleList li {
-    margin-bottom: 5px;
-    cursor: pointer;
+    margin-bottom: 10px; /* Added spacing between list items */
+    font-size: 16px; /* Increased font size for better readability */
+    line-height: 1.5; /* Added line height for better spacing */
 }
 
-#genreList li:hover, #titleList li:hover {
-    text-decoration: underline;
-    color: #007bff;
+#genreList li a, #titleList li a {
+    text-decoration: none; /* Removed underline */
+    color: #007bff; /* Changed color */
+}
+
+#genreList li a:hover, #titleList li a:hover {
+    text-decoration: underline; /* Added underline on hover */
+    color: #0056b3; /* Changed hover color */
 }

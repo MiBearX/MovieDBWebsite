@@ -11,33 +11,75 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <title>Single Movie</title>
+    <style>
+        /* Custom Styles */
+        .header-container {
+            width: 100%;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.75rem;
+            color: #343a40;
+        }
+        .header .btn-primary {
+            background-color: #6c757d;
+            border: none;
+            font-size: 1rem;
+            padding: 10px 20px;
+        }
+        .header .btn-primary:hover {
+            background-color: #5a6268;
+        }
+        .table {
+            margin-top: 20px;
+        }
+        .btn-secondary {
+            margin-right: 5px;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+    </style>
 </head>
 <body>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Single Movie Page</h1>
-    <a href="index.html" class="btn btn-primary">Browse Movies</a>
+<div class="header-container">
+    <div class="header">
+        <h1>Single Movie Page</h1>
+        <a href="index.html" class="btn btn-primary">Browse Movies</a>
+    </div>
 </div>
 
-<!-- H3 body is left empty here, will be populated with the data retrieved with single-star.js -->
-<!-- single-star.js will find this html element by it's id "star_info" -->
-<h3 id="movie_info"></h3>
-<table id=single_movie_table class="table table-striped">
-    <thead>
-    <tr>
-        <!-- Titles of each column-->
-        <th>Title</th>
-        <th>Year</th>
-        <th>Director</th>
-        <th>Genres</th>
-        <th>Stars</th>
-        <th>Rating</th>
-        <th><button id="singleMovieShoppingCartBtn" class="btn btn-secondary">Checkout</button></th>
-    </tr>
-    </thead>
-
-    <tbody id=single_movie_table_body></tbody>
-</table>
+<div class="container">
+    <!-- H3 body is left empty here, will be populated with the data retrieved with single-movie.js -->
+    <!-- single-movie.js will find this html element by its id "movie_info" -->
+    <h3 id="movie_info"></h3>
+    <table id="single_movie_table" class="table table-striped">
+        <thead>
+        <tr>
+            <!-- Titles of each column-->
+            <th>Title</th>
+            <th>Year</th>
+            <th>Director</th>
+            <th>Genres</th>
+            <th>Stars</th>
+            <th>Rating</th>
+            <th><button id="singleMovieShoppingCartBtn" class="btn btn-secondary">Checkout</button></th>
+        </tr>
+        </thead>
+        <tbody id="single_movie_table_body"></tbody>
+    </table>
+</div>
 
 <!-- Load jQuery and Bootstrap JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -45,11 +87,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 <!-- Load our own JS file -->
-<!-- The path is relative to single-star.html, since these two files are in the same directory -->
+<!-- The path is relative to single-movie.html, since these two files are in the same directory -->
 <!-- Note the url does not contain a "/" in the beginning, which means the url is relative to current path
      otherwise the url is relative to the root path-->
 <script src="single-movie.js"></script>
 </body>
-
-
 </html>
