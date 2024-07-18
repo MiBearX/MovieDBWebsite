@@ -3,34 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Page</title>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <title>Search Movies</title>
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
 
-<h1>Main Page</h1>
-<button id="shoppingCartBtn" class="btn btn-secondary">Checkout</button>
+<div class="header">
+    <h1>Search Movies</h1>
+    <button id="shoppingCartBtn" class="btn btn-secondary">Checkout</button>
+</div>
 
 <!-- Search Section -->
 <section id="search">
-    <h2>Search Movies</h2>
-    <form id="searchForm">
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title">
-
-        <label for="year">Year:</label>
-        <input type="number" id="year" name="year">
-
-        <label for="director">Director:</label>
-        <input type="text" id="director" name="director">
-
-        <label for="star">Star's Name:</label>
-        <input type="text" id="star" name="star">
-
-        <button type="submit">Search</button>
+    <h2>Search Movies by Category</h2>
+    <form id="searchForm" class="form-container">
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title">
+        </div>
+        <div class="form-group">
+            <label for="year">Year:</label>
+            <input type="number" id="year" name="year">
+        </div>
+        <div class="form-group">
+            <label for="director">Director:</label>
+            <input type="text" id="director" name="director">
+        </div>
+        <div class="form-group">
+            <label for="star">Star's Name:</label>
+            <input type="text" id="star" name="star">
+        </div>
+        <button type="submit" class="btn-primary">Search</button>
     </form>
 </section>
+
 <div class="container">
     <form id="fullTextForm">
         <input type="text" name="hero" id="autocomplete"
@@ -40,9 +46,10 @@
     </form>
 </div>
 
+
 <!-- Browse Section -->
 <section id="browse">
-    <h2>Browse Movies</h2>
+
     <div>
         <h3>Browse by Genre</h3>
         <ul id="genreList">
@@ -54,8 +61,7 @@
     </div>
 </section>
 
-<!-- Script Section (jQuery is used for simplicity) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <!-- include jquery autocomplete JS  -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.devbridge-autocomplete/1.4.11/jquery.autocomplete.min.js"></script>
 <script src="main.js"></script>

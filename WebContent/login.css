@@ -5,6 +5,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
+    font-family: Arial, sans-serif;
 }
 .container {
     width: 100%;
@@ -13,14 +14,46 @@ body {
     background: white;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-align: center;
 }
 h2 {
     text-align: center;
     margin-bottom: 20px;
+    font-size: 24px; /* Changed font size */
+    color: #333;
 }
+
+.form-group {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+label {
+    display: inline-block;
+    width: 80px;
+    margin-right: 10px;
+    font-weight: bold;
+    color: #555;
+    text-align: right;
+}
+
 .form-control {
+    flex: 1;
     margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
 }
+
+.form-control:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 8px rgba(0,123,255,0.2);
+}
+
 .btn-primary {
     width: 100%;
     padding: 10px;
@@ -29,7 +62,21 @@ h2 {
     color: white;
     font-size: 16px;
     cursor: pointer;
+    border-radius: 4px; /* Changed border radius */
+    transition: background-color 0.3s;
 }
 .btn-primary:hover {
     background-color: #0056b3;
+}
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.g-recaptcha {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
 }

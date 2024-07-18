@@ -13,6 +13,7 @@ public class LoginFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {
         allowedURIs.add("login.html");
         allowedURIs.add("login.js");
+        allowedURIs.add("login.css");
         allowedURIs.add("api/login");
         allowedURIs.add("/cs122b_project1_api_example_war/");
     }
